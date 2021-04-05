@@ -49,7 +49,8 @@ def notify(event_hook)
 
   raise "\n\nERROR::ROCKET-CHAT-TASK: config option 'rocket_chat_webhook_url' is not set\n\n" unless config[:rocket_chat_url]
   
-  notification_text = "#{event_hook} deployment to '#{config[:server][:name]}' on branch '#{config[:branch]}' to stage '#{config[:stage]}'"
+  deploy_user ||= ENV['BUILD_USER'] || Etc.getpwnam(ENV['USER']).gecos || ENV['USER'] || ENV['USERNAME']
+  notification_text = "#{deploy_user} has #{event_hook} deploying branch '#{config[:branch]}' to '#{config[:stage]}'"
 
   if dry_run?
     puts "[Rocket Chat] #{event_hook}"
